@@ -6,26 +6,32 @@ defmodule DirtyDriver.Browser do
   alias DirtyDriver.SessionAgent
   alias DirtyDriver.Commands
 
-  def start_link(args) do
-    Task.start_link(__MODULE__, :start, [args])
+  def start_link(browser) do
+    Task.start_link(__MODULE__, :start, [browser])
   end
 
-  def start(args) do
-    if args == "firefox" do
-      System.cmd("geckodriver", [])
+  def start(browser) do
+    try do
+      if browser == "firefox" do
+        System.cmd("geckodriver", [])
+      end
+    after
+      IO.puts "Running"
     end
   end
 
-  def end_driver do
+  def end_session do
     Commands.delete_session()
-    {:ok, conn} = Mint.HTTP.close(ConnectionAgent.conn())
+    {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn())
+  end
 
+  def kill_driver do
     {pid, _} = System.cmd("pidof", ["geckodriver"])
     System.cmd("kill", ["-9", String.trim(pid)])
   end
 
-  def open_browser(name) do
-    start_link(name)
+  def open_browser(browser) do
+    start_link(browser)
     conn = MintHelper.connect_to_session()
     ConnectionAgent.start_link(conn)
     session_data = Commands.start_session()

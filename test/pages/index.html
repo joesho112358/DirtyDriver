@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Index</title>
+    </head>
+    <body>
+        <h1>Index</h1>
+        <ul>
+            <li>
+                <a id="other_page_link" href="other_page.html">Other Page</a>
+            </li>
+        </ul>
+
+        <form action="index.html" method="get">
+            <label id="label" for="text_field">label</label>
+            <input id="text_field" type="text" name="some_text" value="Text"/>
+
+            <select id="select_list">
+                <option value="1" selected>a</option>
+                <option value="2">b</option>
+                <option value="3">c</option>
+            </select>
+
+            <input id="enabled_submit" type="submit" value="Submit"/>
+            <input id="disabled_submit" type="submit" value="Disabled" disabled=true/>
+        </form>
+
+        <p id="visible">Visible</p>
+        <p id="invisible" style="display:none">Invisible</p>
+
+        <a id='alert' href="#" onclick="alert('alert!')")>Alert</a>
+        <a id='prompt' href="#" onclick="prompt()">Prompt</a>
+        <p id='prompt_text'></p>
+        <script>
+            function prompt() {
+                var input = prompt("input", "");
+                if (input != null) {
+                    document.getElementById("prompt-text").innerHTML = input;
+                }
+            }
+        </script>
+    </body>
+</html>

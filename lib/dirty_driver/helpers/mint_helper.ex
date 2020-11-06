@@ -25,8 +25,8 @@ defmodule DirtyDriver.MintHelper do
             {:data, ^request_ref, data} ->
               IO.puts("> Response body")
               IO.puts(data)
-              {status, mapper} = JSON.decode(data)
-              IO.inspect(mapper)
+              {_status, mapper} = JSON.decode(data)
+              mapper
 
             {:done, ^request_ref} ->
               IO.puts("> Response fully received")
@@ -41,4 +41,3 @@ defmodule DirtyDriver.MintHelper do
   end
 
 end
-
