@@ -30,7 +30,27 @@ defmodule DirtyDriverElementTest do
     session_data = Commands.start_session()
     SessionAgent.start_link(session_data["value"]["sessionId"])
 
-    {:ok, %{}}
+    :ok
+  end
+
+  test "can get element's tag name" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      assert ElementInteraction.tag_name("#piece_o_text", "css selector") == "h1"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can get text field element's value" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      assert ElementInteraction.value("#text_field", "css selector") == "Text"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
   end
 
   test "can get text element's text" do

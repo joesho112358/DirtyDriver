@@ -14,6 +14,18 @@ defmodule DirtyDriver.ElementInteraction do
     set_text(text)
   end
 
+  def tag_name(), do: MintHelper.value_from_response(Commands.get_element_tag_name())["value"]
+  def tag_name(location, strategy) do
+    element(location, strategy)
+    tag_name()
+  end
+
+  def value(), do: MintHelper.value_from_response(Commands.get_element_property("value"))["value"]
+  def value(location, strategy) do
+    element(location, strategy)
+    value()
+  end
+
   def text(location, strategy) do
     element(location, strategy)
     text()
@@ -35,10 +47,9 @@ defmodule DirtyDriver.ElementInteraction do
   end
 
   def visible? do
-    call_response = Commands.get_element_css_value("display")
-    {response , _} = List.pop_at(call_response, 2)
+    response = MintHelper.value_from_response(Commands.get_element_css_value("display"))["value"]
 
-    response["value"] != "none"
+    response != "none"
   end
 
 end
