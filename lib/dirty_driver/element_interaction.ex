@@ -5,7 +5,29 @@ defmodule DirtyDriver.ElementInteraction do
 
   def element(location, strategy) do
     element = Commands.find_element(location, strategy)
-    ElementAgent.start_link(List.pop_at(element, 2))
+    {ele, _} = List.pop_at(element, 2)
+    ElementAgent.start_link(ele)
+  end
+
+  def elements(location, strategy) do
+    response = Commands.find_elements(location, strategy)
+    {elements, _} = List.pop_at(response, 2)
+
+    get_elements_agents elements["value"]
+  end
+
+  defp get_elements_agents(elements), do: get_elements_agents(elements, 0, [])
+  defp get_elements_agents([], _, return_names) do
+    Enum.map(Enum.reverse(return_names), fn x -> ElementAgent.element(x) end)
+  end
+  defp get_elements_agents([element | elements], counter, return_names) do
+    atomized = counter |> Integer.to_string |> String.to_atom
+    mapped_element = %{
+      "value" => element
+    }
+    ElementAgent.start_link(mapped_element, atomized)
+    return_names = [atomized | return_names]
+    get_elements_agents(elements, counter + 1, return_names)
   end
 
   def set_text(text), do: Commands.element_send_keys(text)
@@ -31,8 +53,12 @@ defmodule DirtyDriver.ElementInteraction do
     text()
   end
 
-  def text do
+  def text() do
     MintHelper.value_from_response(Commands.get_element_text())["value"]
+  end
+  
+  def text(name) do
+    MintHelper.value_from_response(Commands.get_element_text(name))["value"]
   end
 
   def click, do: Commands.element_click()

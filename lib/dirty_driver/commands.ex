@@ -346,7 +346,7 @@ defmodule DirtyDriver.Commands do
       "POST",
       "/session/#{SessionAgent.session_id()}/elements",
       [{"content-type", "application/json"}],
-      "{}"
+      "{\"using\": \"#{selector}\", \"value\": \"#{location}\"}"
     )
 
     MintHelper.receive_message(conn, request_ref)
@@ -424,11 +424,11 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  def get_element_text do
+  def get_element_text(ele \\ ElementAgent.element()) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/text",
+      "/session/#{SessionAgent.session_id()}/element/#{ele}/text",
       [],
       ""
     )

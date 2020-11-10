@@ -13,6 +13,7 @@ defmodule DirtyDriverElementTest do
   setup_all do
     http_server_pid = DirtyDriver.TestServer.start
 
+    Process.sleep(500)
     on_exit(fn ->
       DirtyDriver.TestServer.stop(http_server_pid)
     end)
@@ -21,6 +22,7 @@ defmodule DirtyDriverElementTest do
   end
 
   setup do
+    # to do, get this into the setup_all
     Browser.start_link("firefox")
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
@@ -81,6 +83,18 @@ defmodule DirtyDriverElementTest do
       assert ElementInteraction.visible?() == false
       ElementInteraction.element("#invisible2", "css selector")
       assert ElementInteraction.visible?() == false
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can get multiple elements" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      elements = ElementInteraction.elements(".double", "css selector")
+      assert(ElementInteraction.text(Enum.at(elements, 0)), "first")
+      assert(ElementInteraction.text(Enum.at(elements, 1)), "second")
     after
       Browser.end_session()
       Browser.kill_driver()

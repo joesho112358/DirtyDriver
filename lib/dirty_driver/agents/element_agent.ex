@@ -1,11 +1,11 @@
 defmodule DirtyDriver.ElementAgent do
   use Agent
 
-  @doc """
+  """
     Parses expected element map
   """
   defp parse_map(map) do
-    List.first(Map.values(elem(map, 0)["value"]))
+    List.first(Map.values(map["value"]))
   end
 
   @doc """
@@ -16,16 +16,16 @@ defmodule DirtyDriver.ElementAgent do
       }
     }
   """
-  def start_link(initial_value) do
-    Agent.start_link(fn -> parse_map(initial_value) end, name: __MODULE__)
+  def start_link(initial_value, name \\ __MODULE__) do
+    Agent.start_link(fn -> parse_map(initial_value) end, name: name)
   end
 
-  def element do
-    Agent.get(__MODULE__, & &1)
+  def element(name \\ __MODULE__) do
+    Agent.get(name, & &1)
   end
 
-  def set_element(element) do
-    Agent.update(__MODULE__, fn _ -> parse_map(element) end)
+  def set_element(element, name \\ __MODULE__) do
+    Agent.update(name, fn _ -> parse_map(element) end)
   end
 
 end
