@@ -6,4 +6,5 @@ Here is some usage
     DirtyDriver.Browser.go_to("http://www.github.com/")
     DirtyDriver.ElementInteraction.element("body", "css selector")
     DirtyDriver.ElementInteraction.text()
-    DirtyDriver.Browser.end_driver()
+    DirtyDriver.Browser.end_session()
+    DirtyDriver.Browser.kill_driver()

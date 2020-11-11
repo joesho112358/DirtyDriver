@@ -42,4 +42,26 @@ defmodule DirtyDriver.Browser do
     Commands.set_url(url)
   end
 
+  def get_url() do
+    [:ok, :ok, url, :ok] = Commands.get_url()
+    url["value"]
+  end
+
+  def back() do
+    Commands.back()
+  end
+
+  def forward() do
+    Commands.forward()
+  end
+
+  def refresh() do
+    Commands.refresh()
+  end
+
+  def title() do
+    [:ok, :ok, url, :ok] = Commands.get_title()
+    url["value"]
+  end
+
 end

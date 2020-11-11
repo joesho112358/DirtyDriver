@@ -1,14 +1,14 @@
 Code.require_file "server.exs", __DIR__
 
-defmodule DirtyDriverElementTest do
+defmodule DirtyDriverBrowserTest do
   use ExUnit.Case, async: false
 
   alias DirtyDriver.Browser
+  alias DirtyDriver.ElementInteraction
   alias DirtyDriver.MintHelper
   alias DirtyDriver.ConnectionAgent
   alias DirtyDriver.SessionAgent
   alias DirtyDriver.Commands
-  alias DirtyDriver.ElementInteraction
 
   setup_all do
     http_server_pid = DirtyDriver.TestServer.start
@@ -22,7 +22,6 @@ defmodule DirtyDriverElementTest do
   end
 
   setup do
-    # to do, get this into the setup_all
     Browser.start_link("firefox")
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
@@ -35,67 +34,68 @@ defmodule DirtyDriverElementTest do
     :ok
   end
 
-  test "can get element's tag name" do
+  test "can nav to url" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      assert ElementInteraction.tag_name("#piece_o_text", "css selector") == "h1"
+      assert Commands.get_url == [:ok, :ok, %{"value" => "http://localhost:5555/index.html"}, :ok]
     after
       Browser.end_session()
       Browser.kill_driver()
     end
   end
 
-  test "can get text field element's value" do
+  test "can go back in the browser" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      assert ElementInteraction.value("#text_field", "css selector") == "Text"
+      Browser.go_to("http://localhost:5555/other_page.html")
+      Browser.back
+      assert Browser.get_url == "http://localhost:5555/index.html"
     after
       Browser.end_session()
       Browser.kill_driver()
     end
   end
 
-  test "can get text element's text" do
+  test "can get url" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      assert ElementInteraction.text("#piece_o_text", "css selector") == "Index"
+      assert Browser.get_url == "http://localhost:5555/index.html"
     after
       Browser.end_session()
       Browser.kill_driver()
     end
   end
 
-  test "can get text element's text after the getting element" do
+  test "can go forward in the browser" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.element("#piece_o_text", "css selector")
-      assert ElementInteraction.text() == "Index"
+      Browser.go_to("http://localhost:5555/other_page.html")
+      Browser.back
+      Browser.forward
+      assert Browser.get_url == "http://localhost:5555/other_page.html"
     after
       Browser.end_session()
       Browser.kill_driver()
     end
   end
 
-  test "can get invisibile element's as status as not visible" do
-    try do
-      Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.element("#invisible", "css selector")
-      assert ElementInteraction.visible?() == false
-      ElementInteraction.element("#invisible2", "css selector")
-      assert ElementInteraction.visible?() == false
-    after
-      Browser.end_session()
-      Browser.kill_driver()
-    end
-  end
+  # well this doesn't work... need to figure that out!
+  # test "can go refresh the browser" do
+  #   try do
+  #     Browser.go_to("http://localhost:5555/index.html")
+  #     ElementInteraction.set_text("#text_field", "css selector", "hello")
+  #     Browser.refresh
+  #     assert ElementInteraction.value("#text_field", "css selector") == "hello"
+  #   after
+  #     Browser.end_session()
+  #     Browser.kill_driver()
+  #   end
+  # end
 
-  test "can get multiple elements" do
+  test "can get browser title" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      elements = ElementInteraction.elements(".double", "css selector")
-      assert(ElementInteraction.text(Enum.at(elements, 0)), "first")
-      assert(ElementInteraction.text(Enum.at(elements, 1)), "second")
-      assert(ElementInteraction.text(Enum.at(elements, 2)), "third")
+      assert Browser.title() == "Index"
     after
       Browser.end_session()
       Browser.kill_driver()
