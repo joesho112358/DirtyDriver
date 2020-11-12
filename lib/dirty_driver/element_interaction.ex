@@ -4,9 +4,9 @@ defmodule DirtyDriver.ElementInteraction do
   alias DirtyDriver.MintHelper
 
   def element(location, strategy) do
-    element = Commands.find_element(location, strategy)
-    {ele, _} = List.pop_at(element, 2)
-    ElementAgent.start_link(ele)
+    response = Commands.find_element(location, strategy)
+    {element, _} = List.pop_at(response, 2)
+    ElementAgent.start_link(element)
   end
 
   def elements(location, strategy) do
@@ -56,7 +56,7 @@ defmodule DirtyDriver.ElementInteraction do
   def text() do
     MintHelper.value_from_response(Commands.get_element_text())["value"]
   end
-  
+
   def text(name) do
     MintHelper.value_from_response(Commands.get_element_text(name))["value"]
   end
@@ -73,9 +73,9 @@ defmodule DirtyDriver.ElementInteraction do
   end
 
   def visible? do
-    response = MintHelper.value_from_response(Commands.get_element_css_value("display"))["value"]
+    response = MintHelper.value_from_response(Commands.get_element_css_value("display"))
 
-    response != "none"
+    response["value"] != "none"
   end
 
 end
