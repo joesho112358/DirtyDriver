@@ -12,7 +12,7 @@ defmodule DirtyDriver.MintHelper do
   def receive_message(conn, request_ref) do
     receive do
       message ->
-        {:ok, conn, responses} = Mint.HTTP.stream(conn, message)
+        {:ok, _conn, responses} = Mint.HTTP.stream(conn, message)
 
         for response <- responses do
           case response do

@@ -192,14 +192,13 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  #  hmmm need to get window handle
   def switch_to_window(handle) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "POST",
       "/session/#{SessionAgent.session_id()}/window",
       [{"content-type", "application/json"}],
-      "{}"
+      "{\"handle\": \"#{ handle }\"}"
     )
 
     MintHelper.receive_message(conn, request_ref)

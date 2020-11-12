@@ -79,23 +79,32 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
-  # well this doesn't work... need to figure that out!
-  # test "can go refresh the browser" do
-  #   try do
-  #     Browser.go_to("http://localhost:5555/index.html")
-  #     ElementInteraction.set_text("#text_field", "css selector", "hello")
-  #     Browser.refresh
-  #     assert ElementInteraction.value("#text_field", "css selector") == "hello"
-  #   after
-  #     Browser.end_session()
-  #     Browser.kill_driver()
-  #   end
-  # end
+  test "can refresh the browser" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.set_text("#text_field", "css selector", "hello")
+      Browser.refresh
+      assert ElementInteraction.value("#text_field", "css selector") == "Text"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
 
   test "can get browser title" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       assert Browser.title() == "Index"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can get window handle" do
+    try do
+      handle = Browser.get_window_handle()
+      assert Regex.match?(~r/\d+/, handle)
     after
       Browser.end_session()
       Browser.kill_driver()

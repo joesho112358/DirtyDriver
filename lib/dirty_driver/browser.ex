@@ -5,6 +5,7 @@ defmodule DirtyDriver.Browser do
   alias DirtyDriver.ConnectionAgent
   alias DirtyDriver.SessionAgent
   alias DirtyDriver.Commands
+  alias DirtyDriver.ElementAgent
 
   def start_link(browser) do
     Task.start_link(__MODULE__, :start, [browser])
@@ -56,12 +57,36 @@ defmodule DirtyDriver.Browser do
   end
 
   def refresh() do
+    # need to stop the previous element to keep from a stale element error
+    ElementAgent.stop()
     Commands.refresh()
   end
 
   def title() do
     [:ok, :ok, url, :ok] = Commands.get_title()
     url["value"]
+  end
+
+  def get_window_handle() do
+    [:ok, :ok, handle, :ok] = Commands.get_window_handle
+    handle["value"]
+  end
+
+  def close_window() do
+    Commands.close_window
+  end
+
+  def switch_to_window(handle) do
+    Commands.switch_to_window(handle)
+  end
+
+  def get_window_handles() do
+    [:ok, :ok, handles, :ok] = Commands.get_window_handles
+    handles["value"]
+  end
+
+  def new_window() do
+    Commands.new_window
   end
 
 end

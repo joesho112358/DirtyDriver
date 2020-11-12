@@ -28,4 +28,8 @@ defmodule DirtyDriver.ElementAgent do
     Agent.update(name, fn _ -> parse_map(element) end)
   end
 
+  def stop(name \\ __MODULE__) do
+    Agent.stop(name)
+  end
+
 end
