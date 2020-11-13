@@ -699,13 +699,13 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  def send_alert_text do
+  def send_alert_text(text) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "POST",
       "/session/#{SessionAgent.session_id()}/alert/text",
       [{"content-type", "application/json"}],
-      "{}"
+      "{\"text\": \"#{text}\"}"
     )
 
     MintHelper.receive_message(conn, request_ref)

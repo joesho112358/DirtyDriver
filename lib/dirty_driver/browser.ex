@@ -89,4 +89,21 @@ defmodule DirtyDriver.Browser do
     Commands.new_window
   end
 
+  def dismiss_alert do
+    Commands.dismiss_alert()
+  end
+
+  def accept_alert do
+    Commands.accept_alert()
+  end
+
+  def get_alert_text do
+    [:ok, :ok, text, :ok] = Commands.get_alert_text()
+    text["value"]
+  end
+
+  def send_alert_text(text) do
+    Commands.send_alert_text(text)
+  end
+
 end
