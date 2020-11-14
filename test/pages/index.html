@@ -34,13 +34,14 @@
         <p id="invisible2" hidden>Invisible</p>
 
         <a id='alert' href="#" onclick="alert('alert!')")>Alert</a>
-        <a id='prompt' href="#" onclick="prompt()">Prompt</a>
+        <br>
+        <a id='prompt' href="#" onclick="promptFun()">Prompt</a>
         <p id='prompt_text'></p>
         <script>
-            function prompt() {
-                var input = prompt("input", "");
+            function promptFun() {
+                var input = prompt("input", "here");
                 if (input != null) {
-                    document.getElementById("prompt-text").innerHTML = input;
+                    document.getElementById("prompt_text").innerHTML = input;
                 }
             }
         </script>

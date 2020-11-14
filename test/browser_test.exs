@@ -137,4 +137,17 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can send text to prompt" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#prompt", "css selector").stop()
+      Browser.send_alert_text("test text")
+      Browser.accept_alert()
+      assert ElementInteraction.text("#prompt_text", "css selector") == "test text"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 end
