@@ -150,4 +150,15 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can get page source code" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      contents = "<html><head>\n        <title>Index</title>\n    </head>\n    <body>"
+      assert String.contains?(Browser.get_page_source(), contents)
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 end
