@@ -10,6 +10,7 @@ defmodule DirtyDriver.ElementInteraction do
     response = Commands.find_element(location, strategy)
     {element, _} = List.pop_at(response, 2)
     ElementAgent.start_link(element)
+    __MODULE__
   end
 
   def elements(location, strategy) do
@@ -33,10 +34,15 @@ defmodule DirtyDriver.ElementInteraction do
     get_elements_agents(elements, counter + 1, return_names)
   end
 
-  def set_text(text), do: Commands.element_send_keys(text)
+  def set_text(text) do
+    Commands.element_send_keys(text)
+    __MODULE__
+  end
+
   def set_text(location, strategy, text) do
     element(location, strategy)
     set_text(text)
+    __MODULE__
   end
 
   def tag_name(), do: MintHelper.value_from_response(Commands.get_element_tag_name())["value"]
@@ -68,7 +74,7 @@ defmodule DirtyDriver.ElementInteraction do
     Commands.element_click()
     __MODULE__
   end
-  
+
   def click(location, strategy) do
     element(location, strategy)
     click()
