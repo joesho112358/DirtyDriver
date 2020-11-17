@@ -1,5 +1,7 @@
 # Dirty Driver
 
+What is this thing? It provides an Elixir implementation of [W3C WebDriver endpoints](https://w3c.github.io/webdriver/)
+
 Here is some usage
 
     DirtyDriver.Browser.open_browser("firefox")
