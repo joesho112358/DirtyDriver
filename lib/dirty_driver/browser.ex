@@ -106,8 +106,19 @@ defmodule DirtyDriver.Browser do
     Commands.send_alert_text(text)
   end
 
+
+  @doc """
+    DOCUMENT
+  """
+
+  @spec get_page_source :: String
   def get_page_source do
     [:ok, :ok, text, :ok] = Commands.get_page_source()
+    text["value"]
+  end
+
+  def execute_script(script, arguments \\ []) do
+    [:ok, :ok, text, :ok] = Commands.execute_script(script, arguments)
     text["value"]
   end
 

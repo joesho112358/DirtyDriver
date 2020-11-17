@@ -161,4 +161,30 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can execute a script on the page" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      script = "document.getElementById('piece_o_text').textContent='yolo'"
+      Browser.execute_script(script)
+
+      assert ElementInteraction.text("#piece_o_text", "css selector") == "yolo"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can execute a script with arguments on the page" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      script = "document.getElementById('piece_o_text').textContent=arguments[0]"
+      Browser.execute_script(script, ["yolo"])
+
+      assert ElementInteraction.text("#piece_o_text", "css selector") == "yolo"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 end
