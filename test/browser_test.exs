@@ -187,4 +187,17 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can execute an async script on the page" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      script = "return 1 + 2;"
+      returned_value = Browser.execute_async_script(script)
+
+      assert returned_value["error"] == "script timeout"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 end

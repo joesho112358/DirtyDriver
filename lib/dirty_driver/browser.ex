@@ -118,8 +118,13 @@ defmodule DirtyDriver.Browser do
   end
 
   def execute_script(script, arguments \\ []) do
-    [:ok, :ok, text, :ok] = Commands.execute_script(script, arguments)
-    text["value"]
+    [:ok, :ok, result, :ok] = Commands.execute_script(script, arguments)
+    result["value"]
+  end
+
+  def execute_async_script(script, arguments \\ []) do
+    [:ok, :ok, result, :ok] = Commands.execute_async_script(script, arguments)
+    result["value"]
   end
 
 end

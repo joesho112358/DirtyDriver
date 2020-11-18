@@ -558,13 +558,13 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  def execute_async_script(script) do
+  def execute_async_script(script, args \\ []) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "POST",
       "/session/#{SessionAgent.session_id()}/execute/async",
       [{"content-type", "application/json"}],
-      "{\"script\": \"#{script}\"}"
+      "{\"script\": \"#{script}\", \"args\": #{inspect args}}"
     )
 
     MintHelper.receive_message(conn, request_ref)
