@@ -111,44 +111,9 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
-  test "can get alert text" do
-    try do
-      Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.click("#alert", "css selector")
-      assert Browser.get_alert_text() == "alert!"
-      Browser.dismiss_alert()
-    after
-      Browser.end_session()
-      Browser.kill_driver()
-    end
-  end
-
-  test "can dismiss alert" do
-    try do
-      Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.click("#alert", "css selector")
-      Browser.dismiss_alert()
-      error_message = Browser.get_alert_text()["error"]
-      assert error_message != nil
-      assert error_message != ""
-    after
-      Browser.end_session()
-      Browser.kill_driver()
-    end
-  end
-
-  test "can send text to prompt" do
-    try do
-      Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.click("#prompt", "css selector").stop()
-      Browser.send_alert_text("test text")
-      Browser.accept_alert()
-      assert ElementInteraction.text("#prompt_text", "css selector") == "test text"
-    after
-      Browser.end_session()
-      Browser.kill_driver()
-    end
-  end
+  @doc """
+    DOCUMENT
+  """
 
   test "can get page source code" do
     try do
@@ -194,6 +159,76 @@ defmodule DirtyDriverBrowserTest do
       returned_value = Browser.execute_async_script(script)
 
       assert returned_value["error"] == "script timeout"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  @doc """
+    COOKIES
+  """
+
+  test "can get all cookies when there are none" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      assert Browser.get_all_cookies() == []
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can get all cookies when there are some" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.add_cookie("{\"name\":\"logged_in\", \"value\":\"no\"}")
+      Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
+      assert Browser.get_all_cookies() == [%{"domain" => "localhost", "httpOnly" => false, "name" => "logged_in", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "no"},
+                         %{"domain" => "localhost", "httpOnly" => false, "name" => "present", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "yes"}]
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  @doc """
+    USER PROMPTS
+  """
+
+  test "can get alert text" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#alert", "css selector")
+      assert Browser.get_alert_text() == "alert!"
+      Browser.dismiss_alert()
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can dismiss alert" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#alert", "css selector")
+      Browser.dismiss_alert()
+      error_message = Browser.get_alert_text()["error"]
+      assert error_message != nil
+      assert error_message != ""
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can send text to prompt" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#prompt", "css selector").stop()
+      Browser.send_alert_text("test text")
+      Browser.accept_alert()
+      assert ElementInteraction.text("#prompt_text", "css selector") == "test text"
     after
       Browser.end_session()
       Browser.kill_driver()

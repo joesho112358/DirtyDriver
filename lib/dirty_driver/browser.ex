@@ -11,6 +11,11 @@ defmodule DirtyDriver.Browser do
     Task.start_link(__MODULE__, :start, [browser])
   end
 
+  def kill_driver do
+    {pid, _} = System.cmd("pidof", ["geckodriver"])
+    System.cmd("kill", ["-9", String.trim(pid)])
+  end
+
   def start(browser) do
     try do
       if browser == "firefox" do
@@ -21,15 +26,9 @@ defmodule DirtyDriver.Browser do
     end
   end
 
-  def end_session do
-    Commands.delete_session()
-    {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn())
-  end
-
-  def kill_driver do
-    {pid, _} = System.cmd("pidof", ["geckodriver"])
-    System.cmd("kill", ["-9", String.trim(pid)])
-  end
+  @doc """
+    SESSIONS
+  """
 
   def open_browser(browser) do
     start_link(browser)
@@ -38,6 +37,19 @@ defmodule DirtyDriver.Browser do
     session_data = Commands.start_session()
     SessionAgent.start_link(session_data["value"]["sessionId"])
   end
+
+  def end_session do
+    Commands.delete_session()
+    {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn())
+  end
+
+  @doc """
+    TIMEOUTS
+  """
+
+  @doc """
+    NAVIGATION
+  """
 
   def go_to(url) do
     Commands.set_url(url)
@@ -67,6 +79,10 @@ defmodule DirtyDriver.Browser do
     url["value"]
   end
 
+  @doc """
+    CONTEXTS
+  """
+
   def get_window_handle() do
     [:ok, :ok, handle, :ok] = Commands.get_window_handle
     handle["value"]
@@ -89,24 +105,6 @@ defmodule DirtyDriver.Browser do
     Commands.new_window
   end
 
-  def dismiss_alert do
-    Commands.dismiss_alert()
-  end
-
-  def accept_alert do
-    Commands.accept_alert()
-  end
-
-  def get_alert_text do
-    [:ok, :ok, text, :ok] = Commands.get_alert_text()
-    text["value"]
-  end
-
-  def send_alert_text(text) do
-    Commands.send_alert_text(text)
-  end
-
-
   @doc """
     DOCUMENT
   """
@@ -126,5 +124,48 @@ defmodule DirtyDriver.Browser do
     [:ok, :ok, result, :ok] = Commands.execute_async_script(script, arguments)
     result["value"]
   end
+
+  @doc """
+    COOKIES
+  """
+
+  def get_all_cookies do
+    [:ok, :ok, result, :ok] = Commands.get_all_cookies
+    result["value"]
+  end
+
+  def get_named_cookie do
+
+  end
+
+  def add_cookie(cookie) do
+    Commands.add_cookie(cookie)
+  end
+
+  @doc """
+    USER PROMPTS
+  """
+
+  def dismiss_alert do
+    Commands.dismiss_alert()
+  end
+
+  def accept_alert do
+    Commands.accept_alert()
+  end
+
+  def get_alert_text do
+    [:ok, :ok, text, :ok] = Commands.get_alert_text()
+    text["value"]
+  end
+
+  def send_alert_text(text) do
+    Commands.send_alert_text(text)
+  end
+
+  @doc """
+    SCREEN CAPTURE
+  """
+
 
 end

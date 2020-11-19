@@ -603,7 +603,7 @@ defmodule DirtyDriver.Commands do
       "POST",
       "/session/#{SessionAgent.session_id()}/cookie",
       [{"content-type", "application/json"}],
-      "{}"
+      "{\"cookie\": #{cookie}}"
     )
 
     MintHelper.receive_message(conn, request_ref)
