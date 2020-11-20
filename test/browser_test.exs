@@ -192,6 +192,17 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can add cookies and get cookies by name" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
+      assert Browser.get_named_cookie("present") ==  %{"domain" => "localhost", "httpOnly" => false, "name" => "present", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "yes"}
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
   @doc """
     USER PROMPTS
   """

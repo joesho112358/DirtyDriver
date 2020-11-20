@@ -134,8 +134,9 @@ defmodule DirtyDriver.Browser do
     result["value"]
   end
 
-  def get_named_cookie do
-
+  def get_named_cookie(name) do
+    [:ok, :ok, result, :ok] = Commands.get_named_cookie(name)
+    result["value"]
   end
 
   def add_cookie(cookie) do

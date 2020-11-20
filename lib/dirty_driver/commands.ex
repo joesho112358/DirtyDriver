@@ -590,8 +590,8 @@ defmodule DirtyDriver.Commands do
       ConnectionAgent.conn(),
       "GET",
       "/session/#{SessionAgent.session_id()}/cookie/#{name}",
-      [],
-      ""
+      [{"content-type", "application/json"}],
+      "{\"name\": \"#{name}\"}"
     )
 
     MintHelper.receive_message(conn, request_ref)
