@@ -24,8 +24,14 @@ defmodule DirtyDriverTest do
 
   test "browser is running" do
     Process.sleep(1000)
-
     assert Commands.get_status == [:ok, :ok, %{"value" => %{"message" => "Session already started", "ready" => false}}, :ok]
+  after
+    Browser.end_session()
+    Browser.kill_driver()
+  end
+
+  test "can get browser status" do
+    assert Browser.get_status() == %{"message" => "Session already started", "ready" => false}
   after
     Browser.end_session()
     Browser.kill_driver()

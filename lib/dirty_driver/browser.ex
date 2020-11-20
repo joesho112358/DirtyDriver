@@ -43,6 +43,11 @@ defmodule DirtyDriver.Browser do
     {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn())
   end
 
+  def get_status do
+    [:ok, :ok, status, :ok] = Commands.get_status()
+    status["value"]
+  end
+
   @doc """
     TIMEOUTS
   """
