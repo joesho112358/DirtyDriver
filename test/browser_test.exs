@@ -34,6 +34,57 @@ defmodule DirtyDriverBrowserTest do
     :ok
   end
 
+  @doc """
+    TIMEOUTS
+  """
+
+  test "can get timeouts" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      assert Browser.get_timeouts == %{"implicit" => 0, "pageLoad" => 300000, "script" => 30000}
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can set implicit timeout" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.set_timeouts("{\"implicit\": 123}")
+      assert Browser.get_timeouts["implicit"] == 123
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can set pageLoad timeout" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.set_timeouts("{\"pageLoad\": 123}")
+      assert Browser.get_timeouts["pageLoad"] == 123
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can set script timeout" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.set_timeouts("{\"script\": 123}")
+      assert Browser.get_timeouts["script"] == 123
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  @doc """
+    NAVIGATION
+  """
+
   test "can nav to url" do
     try do
       Browser.go_to("http://localhost:5555/index.html")

@@ -78,15 +78,15 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  def set_timeouts do
+  def set_timeouts(timeout) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "POST",
       "/session/#{SessionAgent.session_id()}/timeouts",
       [{"content-type", "application/json"}],
-      "{}"
+      timeout
     )
-
+    
     MintHelper.receive_message(conn, request_ref)
   end
 

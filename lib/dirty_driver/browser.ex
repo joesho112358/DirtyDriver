@@ -52,6 +52,15 @@ defmodule DirtyDriver.Browser do
     TIMEOUTS
   """
 
+  def get_timeouts do
+    [:ok, :ok, timeouts, :ok] = Commands.get_timeouts
+    timeouts["value"]
+  end
+
+  def set_timeouts(timeout) do
+    Commands.set_timeouts(timeout)
+  end
+
   @doc """
     NAVIGATION
   """
