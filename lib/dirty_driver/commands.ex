@@ -86,7 +86,7 @@ defmodule DirtyDriver.Commands do
       [{"content-type", "application/json"}],
       timeout
     )
-    
+
     MintHelper.receive_message(conn, request_ref)
   end
 
@@ -642,7 +642,7 @@ defmodule DirtyDriver.Commands do
       "POST",
       "/session/#{SessionAgent.session_id()}/actions",
       [{"content-type", "application/json"}],
-      "{}"
+      actions
     )
 
     MintHelper.receive_message(conn, request_ref)
