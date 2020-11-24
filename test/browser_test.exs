@@ -284,6 +284,20 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can accept alert" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#alert", "css selector")
+      Browser.accept_alert()
+      error_message = Browser.get_alert_text()["error"]
+      assert error_message != nil
+      assert error_message != ""
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
   test "can send text to prompt" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
