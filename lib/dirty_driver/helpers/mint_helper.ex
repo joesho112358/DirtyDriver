@@ -1,8 +1,11 @@
 defmodule DirtyDriver.MintHelper do
 
-  def connect_to_session do
+  def connect_to_session(browser \\ "firefox") do
     try do
-      {:ok, conn} = Mint.HTTP.connect(:http, "127.0.0.1", 4444)
+      {:ok, conn} = case browser do
+        "firefox" -> Mint.HTTP.connect(:http, "127.0.0.1", 4444)
+        "chrome" -> Mint.HTTP.connect(:http, "127.0.0.1", 9515)
+      end
       conn
     rescue
       MatchError -> raise("Could not connect to browser\n\tCheck the driver is in the PATH")

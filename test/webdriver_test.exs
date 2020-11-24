@@ -9,7 +9,7 @@ defmodule DirtyDriverTest do
   alias DirtyDriver.SessionAgent
   alias DirtyDriver.Commands
 
-  setup do
+  test "browser is running" do
     Browser.start_link("firefox")
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
@@ -18,11 +18,6 @@ defmodule DirtyDriverTest do
     ConnectionAgent.start_link(conn)
     session_data = Commands.start_session()
     SessionAgent.start_link(session_data["value"]["sessionId"])
-
-    {:ok, %{}}
-  end
-
-  test "browser is running" do
     Process.sleep(1000)
     assert Commands.get_status == [:ok, :ok, %{"value" => %{"message" => "Session already started", "ready" => false}}, :ok]
   after
@@ -31,7 +26,35 @@ defmodule DirtyDriverTest do
   end
 
   test "can get browser status" do
+    Browser.start_link("firefox")
+    # can't have the tests firing up before the geckodriver starts
+    Process.sleep(1000)
+
+    conn = MintHelper.connect_to_session()
+    ConnectionAgent.start_link(conn)
+    session_data = Commands.start_session()
+    SessionAgent.start_link(session_data["value"]["sessionId"])
     assert Browser.get_status() == %{"message" => "Session already started", "ready" => false}
+  after
+    Browser.end_session()
+    Browser.kill_driver()
+  end
+
+  test "can open chrome" do
+    Browser.open_browser("chrome")
+    status = Browser.get_status()
+    assert status["message"] == "ChromeDriver ready for new sessions."
+    assert status["ready"] == true
+  after
+    Browser.end_session()
+    Browser.kill_driver()
+  end
+
+  test "can open firefox" do
+    Browser.open_browser("firefox")
+    status = Browser.get_status()
+    assert status["message"] == "Session already started"
+    assert status["ready"] == false
   after
     Browser.end_session()
     Browser.kill_driver()

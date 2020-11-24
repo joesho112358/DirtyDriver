@@ -13,13 +13,17 @@ defmodule DirtyDriver.Browser do
 
   def kill_driver do
     {pid, _} = System.cmd("pidof", ["geckodriver"])
-    System.cmd("kill", ["-9", String.trim(pid)])
+    if pid, do: System.cmd("kill", ["-9", String.trim(pid)])
+    {pid, _} = System.cmd("pidof", ["chromedriver"])
+    if pid, do: System.cmd("kill", ["-9", String.trim(pid)])
   end
 
   def start(browser) do
     try do
-      if browser == "firefox" do
-        System.cmd("geckodriver", [])
+      case browser do
+        "firefox" -> System.cmd("geckodriver", [])
+        "chrome" -> System.cmd("chromedriver", [])
+        _ -> IO.puts("Something went wrong")
       end
     after
       IO.puts "Running"
@@ -32,9 +36,9 @@ defmodule DirtyDriver.Browser do
 
   def open_browser(browser) do
     start_link(browser)
-    conn = MintHelper.connect_to_session()
+    conn = MintHelper.connect_to_session(browser)
     ConnectionAgent.start_link(conn)
-    session_data = Commands.start_session()
+    session_data = Commands.start_session(browser)
     SessionAgent.start_link(session_data["value"]["sessionId"])
   end
 

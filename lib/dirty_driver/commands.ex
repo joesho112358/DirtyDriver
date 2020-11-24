@@ -39,6 +39,21 @@ defmodule DirtyDriver.Commands do
     MintHelper.value_from_response(MintHelper.receive_message(conn, request_ref))
   end
 
+  def start_session(browser) when browser == "chrome" do
+    {:ok, conn, request_ref} = Mint.HTTP.request(
+      ConnectionAgent.conn(),
+      "POST",
+      "/session",
+      [{"content-type", "application/json"}],
+      "{\"capabilities\": {}}"
+    )
+
+    MintHelper.value_from_response(MintHelper.receive_message(conn, request_ref))
+  end
+  def start_session(browser) when browser != "chrome" do
+    start_session()
+  end
+
   def delete_session do
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
