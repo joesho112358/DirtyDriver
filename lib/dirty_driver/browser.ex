@@ -65,6 +65,21 @@ defmodule DirtyDriver.Browser do
     Commands.set_timeouts(timeout)
   end
 
+  @spec set_implicit_timeout(Integer) :: [any]
+  def set_implicit_timeout(timeout) do
+    Commands.set_timeouts("{\"implicit\": #{timeout}}")
+  end
+
+  @spec set_pageLoad_timeout(Integer) :: [any]
+  def set_pageLoad_timeout(timeout) do
+    Commands.set_timeouts("{\"pageLoad\": #{timeout}}")
+  end
+
+  @spec set_script_timeout(Integer) :: [any]
+  def set_script_timeout(timeout) do
+    Commands.set_timeouts("{\"script\": #{timeout}}")
+  end
+
   @doc """
     NAVIGATION
   """
