@@ -95,11 +95,9 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
-  test "can go back in the browser" do
+  test "can get url" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      Browser.go_to("http://localhost:5555/other_page.html")
-      Browser.back
       assert Browser.get_url == "http://localhost:5555/index.html"
     after
       Browser.end_session()
@@ -107,9 +105,11 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
-  test "can get url" do
+  test "can go back in the browser" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
+      Browser.go_to("http://localhost:5555/other_page.html")
+      Browser.back
       assert Browser.get_url == "http://localhost:5555/index.html"
     after
       Browser.end_session()
@@ -152,10 +152,24 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  @doc """
+    CONTEXTS
+  """
+
   test "can get window handle" do
     try do
       handle = Browser.get_window_handle()
       assert Regex.match?(~r/\d+/, handle)
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can close window" do
+    try do
+      returned_sessions = Browser.close_window()
+      assert returned_sessions == []
     after
       Browser.end_session()
       Browser.kill_driver()

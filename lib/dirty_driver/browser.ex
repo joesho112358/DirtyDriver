@@ -122,7 +122,8 @@ defmodule DirtyDriver.Browser do
   end
 
   def close_window() do
-    Commands.close_window
+    [:ok, :ok, handle, :ok] = Commands.close_window
+    handle["value"]
   end
 
   def switch_to_window(handle) do
