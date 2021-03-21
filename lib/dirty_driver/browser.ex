@@ -127,7 +127,8 @@ defmodule DirtyDriver.Browser do
   end
 
   def switch_to_window(handle) do
-    Commands.switch_to_window(handle)
+    [:ok, :ok, handle, :ok] = Commands.switch_to_window(handle)
+    handle
   end
 
   def get_window_handles() do
@@ -136,7 +137,8 @@ defmodule DirtyDriver.Browser do
   end
 
   def new_window() do
-    Commands.new_window
+    [:ok, :ok, handle, :ok] = Commands.new_window
+    handle["value"]
   end
 
   @doc """

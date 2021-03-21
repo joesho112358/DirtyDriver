@@ -176,6 +176,36 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+#  test "can switch windows" do
+#    try do
+#    after
+#      Browser.end_session()
+#      Browser.kill_driver()
+#    end
+#  end
+#
+#  test "can get handles of all open windows" do
+#    try do
+#    after
+#      Browser.end_session()
+#      Browser.kill_driver()
+#    end
+#  end
+
+  test "can open new window" do
+    try do
+      returned_sessions = Browser.new_window()
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window()
+      [handle] = Browser.get_window_handles()
+      Browser.switch_to_window(handle)
+      Browser.close_window()
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
   @doc """
     DOCUMENT
   """
