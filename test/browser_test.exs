@@ -176,21 +176,40 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
-#  test "can switch windows" do
-#    try do
-#    after
-#      Browser.end_session()
-#      Browser.kill_driver()
-#    end
-#  end
-#
-#  test "can get handles of all open windows" do
-#    try do
-#    after
-#      Browser.end_session()
-#      Browser.kill_driver()
-#    end
-#  end
+  test "can switch windows" do
+    try do
+      current_handle = Browser.get_window_handle()
+      new_handle = Browser.new_window()["handle"]
+      Browser.switch_to_window(new_handle)
+      assert new_handle == Browser.get_window_handle()
+      Browser.switch_to_window(current_handle)
+      assert current_handle == Browser.get_window_handle()
+    after
+      Browser.close_window()
+      [handle] = Browser.get_window_handles()
+      Browser.switch_to_window(handle)
+      Browser.close_window()
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can get handles of all open windows" do
+    try do
+      current_handle = Browser.get_window_handle()
+      new_handle = Browser.new_window()["handle"]
+      all_handles = Browser.get_window_handles()
+      assert Enum.member?(all_handles, current_handle)
+      assert Enum.member?(all_handles, new_handle)
+    after
+      Browser.close_window()
+      [handle] = Browser.get_window_handles()
+      Browser.switch_to_window(handle)
+      Browser.close_window()
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
 
   test "can open new window" do
     try do
