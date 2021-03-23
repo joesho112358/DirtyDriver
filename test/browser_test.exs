@@ -382,18 +382,6 @@ defmodule DirtyDriverBrowserTest do
     USER PROMPTS
   """
 
-  test "can get alert text" do
-    try do
-      Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.click("#alert", "css selector")
-      assert Browser.get_alert_text() == "alert!"
-      Browser.dismiss_alert()
-    after
-      Browser.end_session()
-      Browser.kill_driver()
-    end
-  end
-
   test "can dismiss alert" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
@@ -422,6 +410,18 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can get alert text" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      ElementInteraction.click("#alert", "css selector")
+      assert Browser.get_alert_text() == "alert!"
+      Browser.dismiss_alert()
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
   test "can send text to prompt" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
@@ -434,5 +434,24 @@ defmodule DirtyDriverBrowserTest do
       Browser.kill_driver()
     end
   end
+
+  @doc """
+    SCREEN CAPTURE
+  """
+
+  test "can take screenshot" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      path = "./temp/full_image.png"
+      Browser.save_screenshot(path)
+      assert File.exists?(path)
+      {:ok, file} = File.read(path)
+      assert String.starts_with?(file, <<137, 80, 78, 71, 13, 10, 26, 10>>)
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 
 end
