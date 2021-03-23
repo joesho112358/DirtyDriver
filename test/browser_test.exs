@@ -14,9 +14,11 @@ defmodule DirtyDriverBrowserTest do
     http_server_pid = DirtyDriver.TestServer.start
 
     Process.sleep(500)
-    on_exit(fn ->
-      DirtyDriver.TestServer.stop(http_server_pid)
-    end)
+    on_exit(
+      fn ->
+        DirtyDriver.TestServer.stop(http_server_pid)
+      end
+    )
 
     :ok
   end
@@ -298,19 +300,78 @@ defmodule DirtyDriverBrowserTest do
       Browser.go_to("http://localhost:5555/index.html")
       Browser.add_cookie("{\"name\":\"logged_in\", \"value\":\"no\"}")
       Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
-      assert Browser.get_all_cookies() == [%{"domain" => "localhost", "httpOnly" => false, "name" => "logged_in", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "no"},
-                         %{"domain" => "localhost", "httpOnly" => false, "name" => "present", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "yes"}]
+      assert Browser.get_all_cookies() == [
+               %{
+                 "domain" => "localhost",
+                 "httpOnly" => false,
+                 "name" => "logged_in",
+                 "path" => "/",
+                 "sameSite" => "None",
+                 "secure" => false,
+                 "value" => "no"
+               },
+               %{
+                 "domain" => "localhost",
+                 "httpOnly" => false,
+                 "name" => "present",
+                 "path" => "/",
+                 "sameSite" => "None",
+                 "secure" => false,
+                 "value" => "yes"
+               }
+             ]
     after
       Browser.end_session()
       Browser.kill_driver()
     end
   end
 
-  test "can add cookies and get cookies by name" do
+  test "can get cookies by name" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
-      assert Browser.get_named_cookie("present") ==  %{"domain" => "localhost", "httpOnly" => false, "name" => "present", "path" => "/", "sameSite" => "None", "secure" => false, "value" => "yes"}
+      assert Browser.get_named_cookie("present") == %{
+               "domain" => "localhost",
+               "httpOnly" => false,
+               "name" => "present",
+               "path" => "/",
+               "sameSite" => "None",
+               "secure" => false,
+               "value" => "yes"
+             }
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "get non-existent cookie by name returns an error" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      response = Browser.get_named_cookie("present")
+      assert Enum.member?(Map.keys(response), "error")
+      assert Enum.member?(Map.keys(response), "message")
+      assert Enum.member?(Map.keys(response), "stacktrace")
+      assert response["error"] == "no such cookie"
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+  test "can add cookies" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
+      assert Browser.get_named_cookie("present") == %{
+               "domain" => "localhost",
+               "httpOnly" => false,
+               "name" => "present",
+               "path" => "/",
+               "sameSite" => "None",
+               "secure" => false,
+               "value" => "yes"
+             }
     after
       Browser.end_session()
       Browser.kill_driver()
