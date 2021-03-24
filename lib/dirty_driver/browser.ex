@@ -209,4 +209,9 @@ defmodule DirtyDriver.Browser do
     File.write(file_name, Base.decode64!(response["value"]))
   end
 
+  def save_screenshot_of_element(file_name) do
+    [:ok, :ok, response, :ok] = Commands.take_element_screenshot()
+    File.write(file_name, Base.decode64!(response["value"]))
+  end
+
 end

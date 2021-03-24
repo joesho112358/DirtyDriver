@@ -453,5 +453,20 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  test "can take screenshot of element" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      path = "./temp/element_image.png"
+      ElementInteraction.element("#form", "css selector")
+      Browser.save_screenshot_of_element(path)
+      assert File.exists?(path)
+      {:ok, file} = File.read(path)
+      assert String.starts_with?(file, <<137, 80, 78, 71, 13, 10, 26, 10>>)
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
 
 end
