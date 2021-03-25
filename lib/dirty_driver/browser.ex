@@ -214,4 +214,13 @@ defmodule DirtyDriver.Browser do
     File.write(file_name, Base.decode64!(response["value"]))
   end
 
+  @doc """
+    PRINT
+  """
+
+  def print_page(file_name, range \\ "", total_pages \\ "") do
+    [:ok, :ok, response, :ok] = Commands.print_page(range, total_pages)
+    File.write(file_name, Base.decode64!(response["value"]))
+  end
+
 end

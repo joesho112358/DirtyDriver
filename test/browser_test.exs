@@ -468,5 +468,35 @@ defmodule DirtyDriverBrowserTest do
     end
   end
 
+  @doc """
+    PRINT
+  """
+
+  test "can print page" do
+    try do
+      Browser.go_to("http://localhost:5555/long_page.html")
+      path = "./temp/print_full_page.pdf"
+      Browser.print_page(path)
+      {:ok, file} = File.read(path)
+      assert String.starts_with?(file, "%PDF-1.")
+    after
+      Browser.end_session()
+      Browser.kill_driver()
+    end
+  end
+
+#  todo geckodriver bug
+#  test "can print page with range" do
+#    try do
+#      Browser.go_to("http://localhost:5555/long_page.html")
+#      path = "./temp/print_range_page.pdf"
+#      Browser.print_page(path, "2-3")
+#      {:ok, file} = File.read(path)
+#      assert String.starts_with?(file, "%PDF-1.")
+#    after
+#      Browser.end_session()
+#      Browser.kill_driver()
+#    end
+#  end
 
 end

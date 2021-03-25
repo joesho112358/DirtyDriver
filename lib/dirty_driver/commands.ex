@@ -756,13 +756,16 @@ defmodule DirtyDriver.Commands do
   @doc """
     PRINT
   """
-  def print_page do
+
+  def print_page(range, total_pages) do
+    data = "{\"pageRanges\": [\"#{range}\"], \"totalPages\": \"#{total_pages}\"}"
+
     {:ok, conn, request_ref} = Mint.HTTP.request(
       ConnectionAgent.conn(),
       "POST",
       "/session/#{SessionAgent.session_id()}/print",
       [{"content-type", "application/json"}],
-      "{}"
+      data
     )
 
     MintHelper.receive_message(conn, request_ref)
