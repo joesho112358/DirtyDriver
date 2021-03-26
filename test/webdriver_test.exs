@@ -40,15 +40,16 @@ defmodule DirtyDriverTest do
     Browser.kill_driver()
   end
 
-  test "can open chrome" do
-    Browser.open_browser("chrome")
-    status = Browser.get_status()
-    assert status["message"] == "ChromeDriver ready for new sessions."
-    assert status["ready"] == true
-  after
-    Browser.end_session()
-    Browser.kill_driver()
-  end
+#  should probably test this out on a machine that has chrome installed...
+#  test "can open chrome" do
+#    Browser.open_browser("chrome")
+#    status = Browser.get_status()
+#    assert status["message"] == "ChromeDriver ready for new sessions."
+#    assert status["ready"] == true
+#  after
+#    Browser.end_session()
+#    Browser.kill_driver()
+#  end
 
   test "can open firefox" do
     Browser.open_browser("firefox")

@@ -17,24 +17,24 @@ defmodule DirtyDriver.MintHelper do
       message ->
         {:ok, _conn, responses} = Mint.HTTP.stream(conn, message)
 
-        for response <- responses do
-          case response do
-            {:status, ^request_ref, status_code} ->
-              IO.puts("> Response status code #{status_code}")
+      for response <- responses do
+        case response do
+          {:status, ^request_ref, status_code} ->
+            IO.puts("> Response status code #{status_code}")
 
-            {:headers, ^request_ref, headers} ->
-              IO.puts("> Response headers: #{inspect(headers)}")
+          {:headers, ^request_ref, headers} ->
+            IO.puts("> Response headers: #{inspect(headers)}")
 
-            {:data, ^request_ref, data} ->
-              IO.puts("> Response body")
-              IO.puts(data)
-              {_status, mapper} = JSON.decode(data)
-              mapper
+          {:data, ^request_ref, data} ->
+            IO.puts("> Response body")
+            IO.puts(data)
+            {_status, mapper} = JSON.decode(data)
+            mapper
 
-            {:done, ^request_ref} ->
-              IO.puts("> Response fully received")
-          end
+          {:done, ^request_ref} ->
+            IO.puts("> Response fully received")
         end
+      end
     end
   end
 
