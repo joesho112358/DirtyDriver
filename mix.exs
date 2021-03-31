@@ -58,6 +58,7 @@ defmodule DirtyDriver.MixProject do
     [
       {:mint, "~> 1.0"},
       {:json, "~> 1.2"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 
