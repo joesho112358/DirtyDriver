@@ -10,3 +10,11 @@ Here is some usage
     DirtyDriver.ElementInteraction.text()
     DirtyDriver.Browser.end_session()
     DirtyDriver.Browser.kill_driver()
+
+### Running tests
+
+`mix test`
+
+### Running interactive session
+
+`iex -S mix`
