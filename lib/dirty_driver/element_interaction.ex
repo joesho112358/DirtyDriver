@@ -3,7 +3,7 @@ defmodule DirtyDriver.ElementInteraction do
   alias DirtyDriver.ElementAgent
   alias DirtyDriver.MintHelper
 
-  def stop(), do: ElementAgent.stop
+  def stop, do: ElementAgent.stop
   def stop(name), do: ElementAgent.stop(name)
 
   def element(location, strategy) do
@@ -45,25 +45,25 @@ defmodule DirtyDriver.ElementInteraction do
     __MODULE__
   end
 
-  def tag_name(), do: MintHelper.value_from_response(Commands.get_element_tag_name())["value"]
+  def tag_name, do: MintHelper.value_from_response(Commands.get_element_tag_name)["value"]
   def tag_name(location, strategy) do
     element(location, strategy)
-    tag_name()
+    tag_name
   end
 
-  def value(), do: MintHelper.value_from_response(Commands.get_element_property("value"))["value"]
+  def value, do: MintHelper.value_from_response(Commands.get_element_property("value"))["value"]
   def value(location, strategy) do
     element(location, strategy)
-    value()
+    value
   end
 
   def text(location, strategy) do
     element(location, strategy)
-    text()
+    text
   end
 
-  def text() do
-    MintHelper.value_from_response(Commands.get_element_text())["value"]
+  def text do
+    MintHelper.value_from_response(Commands.get_element_text)["value"]
   end
 
   def text(name) do
@@ -71,19 +71,19 @@ defmodule DirtyDriver.ElementInteraction do
   end
 
   def click do
-    Commands.element_click()
+    Commands.element_click
     __MODULE__
   end
 
   def click(location, strategy) do
     element(location, strategy)
-    click()
+    click
     __MODULE__
   end
 
   def visible?(location, strategy) do
     element(location, strategy)
-    visible?()
+    visible?
   end
 
   def visible? do

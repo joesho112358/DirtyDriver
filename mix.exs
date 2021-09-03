@@ -1,7 +1,7 @@
 defmodule DirtyDriver.MixProject do
   use Mix.Project
 
-  @version "0.0.1"
+  @version "0.0.2"
   @repo_url "https://github.com/joesho112358/DirtyDriver"
 
   def project do
@@ -9,9 +9,9 @@ defmodule DirtyDriver.MixProject do
       app: :dirty_driver,
       version: @version,
       elixir: "~> 1.5",
-      start_permanent: Mix.env() == :prod,
-      elixirc_paths: elixirc_paths(Mix.env()),
-      deps: deps(),
+      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env),
+      deps: deps,
 
       # Xref
       xref: [
@@ -21,7 +21,7 @@ defmodule DirtyDriver.MixProject do
       ],
 
       # Hex
-      package: package(),
+      package: package,
       description: "Small webdriver interactions.",
 
       # Docs

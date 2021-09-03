@@ -27,9 +27,9 @@ defmodule DirtyDriverElementTest do
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
 
-    conn = MintHelper.connect_to_session()
+    conn = MintHelper.connect_to_session
     ConnectionAgent.start_link(conn)
-    session_data = Commands.start_session()
+    session_data = Commands.start_session
     SessionAgent.start_link(session_data["value"]["sessionId"])
 
     :ok
@@ -40,8 +40,8 @@ defmodule DirtyDriverElementTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert ElementInteraction.tag_name("#piece_o_text", "css selector") == "h1"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -50,8 +50,8 @@ defmodule DirtyDriverElementTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert ElementInteraction.value("#text_field", "css selector") == "Text"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -60,8 +60,8 @@ defmodule DirtyDriverElementTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert ElementInteraction.text("#piece_o_text", "css selector") == "Index"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -69,10 +69,10 @@ defmodule DirtyDriverElementTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       ElementInteraction.element("#piece_o_text", "css selector")
-      assert ElementInteraction.text() == "Index"
+      assert ElementInteraction.text == "Index"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -80,12 +80,12 @@ defmodule DirtyDriverElementTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       ElementInteraction.element("#invisible", "css selector")
-      assert ElementInteraction.visible?() == false
+      assert ElementInteraction.visible? == false
       ElementInteraction.element("#invisible2", "css selector")
-      assert ElementInteraction.visible?() == false
+      assert ElementInteraction.visible? == false
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -97,8 +97,8 @@ defmodule DirtyDriverElementTest do
       assert(ElementInteraction.text(Enum.at(elements, 1)), "second")
       assert(ElementInteraction.text(Enum.at(elements, 2)), "third")
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 

@@ -28,9 +28,9 @@ defmodule DirtyDriverBrowserTest do
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
 
-    conn = MintHelper.connect_to_session()
+    conn = MintHelper.connect_to_session
     ConnectionAgent.start_link(conn)
-    session_data = Commands.start_session()
+    session_data = Commands.start_session
     SessionAgent.start_link(session_data["value"]["sessionId"])
 
     :ok
@@ -45,8 +45,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert Browser.get_timeouts == %{"implicit" => 0, "pageLoad" => 300000, "script" => 30000}
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -56,8 +56,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.set_timeouts("{\"implicit\": 123}")
       assert Browser.get_timeouts["implicit"] == 123
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -67,8 +67,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.set_timeouts("{\"pageLoad\": 123}")
       assert Browser.get_timeouts["pageLoad"] == 123
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -78,8 +78,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.set_timeouts("{\"script\": 123}")
       assert Browser.get_timeouts["script"] == 123
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -92,8 +92,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert Commands.get_url == [:ok, :ok, %{"value" => "http://localhost:5555/index.html"}, :ok]
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -102,8 +102,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.go_to("http://localhost:5555/index.html")
       assert Browser.get_url == "http://localhost:5555/index.html"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -114,8 +114,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.back
       assert Browser.get_url == "http://localhost:5555/index.html"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -127,8 +127,8 @@ defmodule DirtyDriverBrowserTest do
       Browser.forward
       assert Browser.get_url == "http://localhost:5555/other_page.html"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -139,18 +139,18 @@ defmodule DirtyDriverBrowserTest do
       Browser.refresh
       assert ElementInteraction.value("#text_field", "css selector") == "Text"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can get browser title" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      assert Browser.title() == "Index"
+      assert Browser.title == "Index"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -160,70 +160,169 @@ defmodule DirtyDriverBrowserTest do
 
   test "can get window handle" do
     try do
-      handle = Browser.get_window_handle()
+      handle = Browser.get_window_handle
       assert Regex.match?(~r/\d+/, handle)
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can close window" do
     try do
-      returned_sessions = Browser.close_window()
+      returned_sessions = Browser.close_window
       assert returned_sessions == []
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can switch windows" do
     try do
-      current_handle = Browser.get_window_handle()
-      new_handle = Browser.new_window()["handle"]
+      current_handle = Browser.get_window_handle
+      new_handle = Browser.new_window["handle"]
       Browser.switch_to_window(new_handle)
-      assert new_handle == Browser.get_window_handle()
+      assert new_handle == Browser.get_window_handle
       Browser.switch_to_window(current_handle)
-      assert current_handle == Browser.get_window_handle()
+      assert current_handle == Browser.get_window_handle
     after
-      Browser.close_window()
-      [handle] = Browser.get_window_handles()
+      Browser.close_window
+      [handle] = Browser.get_window_handles
       Browser.switch_to_window(handle)
-      Browser.close_window()
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can get handles of all open windows" do
     try do
-      current_handle = Browser.get_window_handle()
-      new_handle = Browser.new_window()["handle"]
-      all_handles = Browser.get_window_handles()
+      current_handle = Browser.get_window_handle
+      new_handle = Browser.new_window["handle"]
+      all_handles = Browser.get_window_handles
       assert Enum.member?(all_handles, current_handle)
       assert Enum.member?(all_handles, new_handle)
     after
-      Browser.close_window()
-      [handle] = Browser.get_window_handles()
+      Browser.close_window
+      [handle] = Browser.get_window_handles
       Browser.switch_to_window(handle)
-      Browser.close_window()
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can open new window" do
     try do
-      returned_sessions = Browser.new_window()
+      returned_sessions = Browser.new_window
       assert Map.keys(returned_sessions) == ["handle", "type"]
     after
-      Browser.close_window()
-      [handle] = Browser.get_window_handles()
+      Browser.close_window
+      [handle] = Browser.get_window_handles
       Browser.switch_to_window(handle)
-      Browser.close_window()
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  @tag :wip
+  test "can switch to frame" do
+    try do
+      returned_sessions = Browser.new_window
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window
+      [handle] = Browser.get_window_handles
+      Browser.switch_to_window(handle)
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  @tag :wip
+  test "can switch to parent frame" do
+    try do
+      returned_sessions = Browser.new_window
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window
+      [handle] = Browser.get_window_handles
+      Browser.switch_to_window(handle)
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  test "can get the window size" do
+    try do
+      size = Browser.get_window_rect
+      assert Map.keys(size) == ["height", "width", "x", "y"]
+    after
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  test "can set the window size" do
+    try do
+      window_size = %{"height" => 500, "width" => 800, "x" => 10, "y" => 30}
+      Browser.set_window_rect(window_size["width"], window_size["height"], window_size["x"], window_size["y"])
+      size = Browser.get_window_rect
+      assert size == window_size
+    after
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  @tag :wip
+  test "can maximize the window" do
+    try do
+      returned_sessions = Browser.new_window
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window
+      [handle] = Browser.get_window_handles
+      Browser.switch_to_window(handle)
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  @tag :wip
+  test "can minimize the window" do
+    try do
+      returned_sessions = Browser.new_window
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window
+      [handle] = Browser.get_window_handles
+      Browser.switch_to_window(handle)
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  @tag :wip
+  test "can switch full screen" do
+    try do
+      returned_sessions = Browser.new_window
+      assert Map.keys(returned_sessions) == ["handle", "type"]
+    after
+      Browser.close_window
+      [handle] = Browser.get_window_handles
+      Browser.switch_to_window(handle)
+      Browser.close_window
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -235,10 +334,10 @@ defmodule DirtyDriverBrowserTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       contents = "<html><head>\n        <title>Index</title>\n    </head>\n    <body>"
-      assert String.contains?(Browser.get_page_source(), contents)
+      assert String.contains?(Browser.get_page_source, contents)
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -250,8 +349,8 @@ defmodule DirtyDriverBrowserTest do
 
       assert ElementInteraction.text("#piece_o_text", "css selector") == "yolo"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -263,8 +362,8 @@ defmodule DirtyDriverBrowserTest do
 
       assert ElementInteraction.text("#piece_o_text", "css selector") == "yolo"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -276,8 +375,8 @@ defmodule DirtyDriverBrowserTest do
 
       assert returned_value["error"] == "script timeout"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -288,10 +387,10 @@ defmodule DirtyDriverBrowserTest do
   test "can get all cookies when there are none" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      assert Browser.get_all_cookies() == []
+      assert Browser.get_all_cookies == []
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -300,7 +399,7 @@ defmodule DirtyDriverBrowserTest do
       Browser.go_to("http://localhost:5555/index.html")
       Browser.add_cookie("{\"name\":\"logged_in\", \"value\":\"no\"}")
       Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
-      assert Browser.get_all_cookies() == [
+      assert Browser.get_all_cookies == [
                %{
                  "domain" => "localhost",
                  "httpOnly" => false,
@@ -321,8 +420,8 @@ defmodule DirtyDriverBrowserTest do
                }
              ]
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -340,8 +439,8 @@ defmodule DirtyDriverBrowserTest do
                "value" => "yes"
              }
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -354,8 +453,8 @@ defmodule DirtyDriverBrowserTest do
       assert Enum.member?(Map.keys(response), "stacktrace")
       assert response["error"] == "no such cookie"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -373,8 +472,46 @@ defmodule DirtyDriverBrowserTest do
                "value" => "yes"
              }
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  test "can delete a cookie" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
+      Browser.delete_cookie("present")
+      assert Browser.get_named_cookie("present") == %{
+               "error" => "no such cookie",
+               "message" => "No cookie with name present",
+               "stacktrace" => ""
+             }
+    after
+      Browser.end_session
+      Browser.kill_driver
+    end
+  end
+
+  test "can all delete cookies" do
+    try do
+      Browser.go_to("http://localhost:5555/index.html")
+      Browser.add_cookie("{\"name\":\"logged_in\", \"value\":\"no\"}")
+      Browser.add_cookie("{\"name\":\"present\", \"value\":\"yes\"}")
+      Browser.delete_all_cookies
+      assert Browser.get_named_cookie("logged_in") == %{
+               "error" => "no such cookie",
+               "message" => "No cookie with name logged_in",
+               "stacktrace" => ""
+             }
+      assert Browser.get_named_cookie("present") == %{
+               "error" => "no such cookie",
+               "message" => "No cookie with name present",
+               "stacktrace" => ""
+             }
+    after
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -386,13 +523,13 @@ defmodule DirtyDriverBrowserTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       ElementInteraction.click("#alert", "css selector")
-      Browser.dismiss_alert()
-      error_message = Browser.get_alert_text()["error"]
+      Browser.dismiss_alert
+      error_message = Browser.get_alert_text["error"]
       assert error_message != nil
       assert error_message != ""
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -400,13 +537,13 @@ defmodule DirtyDriverBrowserTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       ElementInteraction.click("#alert", "css selector")
-      Browser.accept_alert()
-      error_message = Browser.get_alert_text()["error"]
+      Browser.accept_alert
+      error_message = Browser.get_alert_text["error"]
       assert error_message != nil
       assert error_message != ""
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -414,24 +551,24 @@ defmodule DirtyDriverBrowserTest do
     try do
       Browser.go_to("http://localhost:5555/index.html")
       ElementInteraction.click("#alert", "css selector")
-      assert Browser.get_alert_text() == "alert!"
-      Browser.dismiss_alert()
+      assert Browser.get_alert_text == "alert!"
+      Browser.dismiss_alert
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
   test "can send text to prompt" do
     try do
       Browser.go_to("http://localhost:5555/index.html")
-      ElementInteraction.click("#prompt", "css selector").stop()
+      ElementInteraction.click("#prompt", "css selector").stop
       Browser.send_alert_text("test text")
-      Browser.accept_alert()
+      Browser.accept_alert
       assert ElementInteraction.text("#prompt_text", "css selector") == "test text"
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -448,8 +585,8 @@ defmodule DirtyDriverBrowserTest do
       {:ok, file} = File.read(path)
       assert String.starts_with?(file, <<137, 80, 78, 71, 13, 10, 26, 10>>)
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -463,8 +600,8 @@ defmodule DirtyDriverBrowserTest do
       {:ok, file} = File.read(path)
       assert String.starts_with?(file, <<137, 80, 78, 71, 13, 10, 26, 10>>)
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
@@ -480,23 +617,23 @@ defmodule DirtyDriverBrowserTest do
       {:ok, file} = File.read(path)
       assert String.starts_with?(file, "%PDF-1.")
     after
-      Browser.end_session()
-      Browser.kill_driver()
+      Browser.end_session
+      Browser.kill_driver
     end
   end
 
-#  todo geckodriver bug
-#  test "can print page with range" do
-#    try do
-#      Browser.go_to("http://localhost:5555/long_page.html")
-#      path = "./temp/print_range_page.pdf"
-#      Browser.print_page(path, "2-3")
-#      {:ok, file} = File.read(path)
-#      assert String.starts_with?(file, "%PDF-1.")
-#    after
-#      Browser.end_session()
-#      Browser.kill_driver()
-#    end
-#  end
+  #  todo geckodriver bug
+  #  test "can print page with range" do
+  #    try do
+  #      Browser.go_to("http://localhost:5555/long_page.html")
+  #      path = "./temp/print_range_page.pdf"
+  #      Browser.print_page(path, "2-3")
+  #      {:ok, file} = File.read(path)
+  #      assert String.starts_with?(file, "%PDF-1.")
+  #    after
+  #      Browser.end_session
+  #      Browser.kill_driver
+  #    end
+  #  end
 
 end

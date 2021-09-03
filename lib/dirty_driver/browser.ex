@@ -43,12 +43,12 @@ defmodule DirtyDriver.Browser do
   end
 
   def end_session do
-    Commands.delete_session()
-    {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn())
+    Commands.delete_session
+    {:ok, _conn} = Mint.HTTP.close(ConnectionAgent.conn)
   end
 
   def get_status do
-    [:ok, :ok, status, :ok] = Commands.get_status()
+    [:ok, :ok, status, :ok] = Commands.get_status
     status["value"]
   end
 
@@ -88,27 +88,27 @@ defmodule DirtyDriver.Browser do
     Commands.set_url(url)
   end
 
-  def get_url() do
-    [:ok, :ok, url, :ok] = Commands.get_url()
+  def get_url do
+    [:ok, :ok, url, :ok] = Commands.get_url
     url["value"]
   end
 
-  def back() do
-    Commands.back()
+  def back do
+    Commands.back
   end
 
-  def forward() do
-    Commands.forward()
+  def forward do
+    Commands.forward
   end
 
-  def refresh() do
+  def refresh do
     # need to stop the previous element to keep from a stale element error
-    ElementAgent.stop()
-    Commands.refresh()
+    ElementAgent.stop
+    Commands.refresh
   end
 
-  def title() do
-    [:ok, :ok, url, :ok] = Commands.get_title()
+  def title do
+    [:ok, :ok, url, :ok] = Commands.get_title
     url["value"]
   end
 
@@ -116,12 +116,12 @@ defmodule DirtyDriver.Browser do
     CONTEXTS
   """
 
-  def get_window_handle() do
+  def get_window_handle do
     [:ok, :ok, handle, :ok] = Commands.get_window_handle
     handle["value"]
   end
 
-  def close_window() do
+  def close_window do
     [:ok, :ok, handle, :ok] = Commands.close_window
     handle["value"]
   end
@@ -131,14 +131,45 @@ defmodule DirtyDriver.Browser do
     handle
   end
 
-  def get_window_handles() do
+  def get_window_handles do
     [:ok, :ok, handles, :ok] = Commands.get_window_handles
     handles["value"]
   end
 
-  def new_window() do
+  def new_window do
     [:ok, :ok, handle, :ok] = Commands.new_window
     handle["value"]
+  end
+
+  def switch_to_frame do
+    [:ok, :ok, handle, :ok] = Commands.switch_to_frame
+    handle["value"]
+  end
+
+  def switch_to_parent_frame do
+    [:ok, :ok, handle, :ok] = Commands.switch_to_parent_frame
+    handle["value"]
+  end
+
+  def get_window_rect do
+    [:ok, :ok, handle, :ok] = Commands.get_window_rect
+    handle["value"]
+  end
+
+  def set_window_rect(width, height, x, y) do
+    Commands.set_window_rect(width, height, x, y)
+  end
+
+  def maximize_window do
+    Commands.maximize_window
+  end
+
+  def minimize_window do
+    Commands.minimize_window
+  end
+
+  def fullscreen_window do
+    Commands.fullscreen_window
   end
 
   @doc """
@@ -147,7 +178,7 @@ defmodule DirtyDriver.Browser do
 
   @spec get_page_source :: String
   def get_page_source do
-    [:ok, :ok, text, :ok] = Commands.get_page_source()
+    [:ok, :ok, text, :ok] = Commands.get_page_source
     text["value"]
   end
 
@@ -179,20 +210,37 @@ defmodule DirtyDriver.Browser do
     Commands.add_cookie(cookie)
   end
 
+  def delete_cookie(cookie) do
+    Commands.delete_cookie(cookie)
+  end
+
+  def delete_all_cookies do
+    Commands.delete_all_cookies
+  end
+
+  @doc """
+    ACTIONS
+  """
+  def perform_actions(actions) do
+  end
+
+  def release_actions do
+  end
+
   @doc """
     USER PROMPTS
   """
 
   def dismiss_alert do
-    Commands.dismiss_alert()
+    Commands.dismiss_alert
   end
 
   def accept_alert do
-    Commands.accept_alert()
+    Commands.accept_alert
   end
 
   def get_alert_text do
-    [:ok, :ok, text, :ok] = Commands.get_alert_text()
+    [:ok, :ok, text, :ok] = Commands.get_alert_text
     text["value"]
   end
 
@@ -205,12 +253,12 @@ defmodule DirtyDriver.Browser do
   """
 
   def save_screenshot(file_name) do
-    [:ok, :ok, response, :ok] = Commands.take_screenshot()
+    [:ok, :ok, response, :ok] = Commands.take_screenshot
     File.write(file_name, Base.decode64!(response["value"]))
   end
 
   def save_screenshot_of_element(file_name) do
-    [:ok, :ok, response, :ok] = Commands.take_element_screenshot()
+    [:ok, :ok, response, :ok] = Commands.take_element_screenshot
     File.write(file_name, Base.decode64!(response["value"]))
   end
 

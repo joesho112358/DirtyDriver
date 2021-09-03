@@ -14,15 +14,15 @@ defmodule DirtyDriverTest do
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
 
-    conn = MintHelper.connect_to_session()
+    conn = MintHelper.connect_to_session
     ConnectionAgent.start_link(conn)
-    session_data = Commands.start_session()
+    session_data = Commands.start_session
     SessionAgent.start_link(session_data["value"]["sessionId"])
     Process.sleep(1000)
     assert Commands.get_status == [:ok, :ok, %{"value" => %{"message" => "Session already started", "ready" => false}}, :ok]
   after
-    Browser.end_session()
-    Browser.kill_driver()
+    Browser.end_session
+    Browser.kill_driver
   end
 
   test "can get browser status" do
@@ -30,35 +30,35 @@ defmodule DirtyDriverTest do
     # can't have the tests firing up before the geckodriver starts
     Process.sleep(1000)
 
-    conn = MintHelper.connect_to_session()
+    conn = MintHelper.connect_to_session
     ConnectionAgent.start_link(conn)
-    session_data = Commands.start_session()
+    session_data = Commands.start_session
     SessionAgent.start_link(session_data["value"]["sessionId"])
-    assert Browser.get_status() == %{"message" => "Session already started", "ready" => false}
+    assert Browser.get_status == %{"message" => "Session already started", "ready" => false}
   after
-    Browser.end_session()
-    Browser.kill_driver()
+    Browser.end_session
+    Browser.kill_driver
   end
 
 #  should probably test this out on a machine that has chrome installed...
 #  test "can open chrome" do
 #    Browser.open_browser("chrome")
-#    status = Browser.get_status()
+#    status = Browser.get_status
 #    assert status["message"] == "ChromeDriver ready for new sessions."
 #    assert status["ready"] == true
 #  after
-#    Browser.end_session()
-#    Browser.kill_driver()
+#    Browser.end_session
+#    Browser.kill_driver
 #  end
 
   test "can open firefox" do
     Browser.open_browser("firefox")
-    status = Browser.get_status()
+    status = Browser.get_status
     assert status["message"] == "Session already started"
     assert status["ready"] == false
   after
-    Browser.end_session()
-    Browser.kill_driver()
+    Browser.end_session
+    Browser.kill_driver
   end
 
 end

@@ -19,7 +19,7 @@ defmodule DirtyDriver.TestServer do
     :ok = :inets.stop(:httpd, pid)
   end
 
-  def stop() do
+  def stop do
     :ok = :inets.stop(:httpd, {{127,0,0,1}, 5555})
   end
 end

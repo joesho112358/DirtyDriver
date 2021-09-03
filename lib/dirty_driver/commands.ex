@@ -29,7 +29,7 @@ defmodule DirtyDriver.Commands do
   """
   def start_session do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
       "/session",
       [{"content-type", "application/json"}],
@@ -41,7 +41,7 @@ defmodule DirtyDriver.Commands do
 
   def start_session(browser) when browser == "chrome" do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
       "/session",
       [{"content-type", "application/json"}],
@@ -51,14 +51,14 @@ defmodule DirtyDriver.Commands do
     MintHelper.value_from_response(MintHelper.receive_message(conn, request_ref))
   end
   def start_session(browser) when browser != "chrome" do
-    start_session()
+    start_session
   end
 
   def delete_session do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "DELETE",
-      "/session/#{SessionAgent.session_id()}/window",
+      "/session/#{SessionAgent.session_id}/window",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -68,7 +68,7 @@ defmodule DirtyDriver.Commands do
 
   def get_status do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
       "/status",
       [],
@@ -83,9 +83,9 @@ defmodule DirtyDriver.Commands do
   """
   def get_timeouts do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/timeouts",
+      "/session/#{SessionAgent.session_id}/timeouts",
       [],
       ""
     )
@@ -95,9 +95,9 @@ defmodule DirtyDriver.Commands do
 
   def set_timeouts(timeout) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/timeouts",
+      "/session/#{SessionAgent.session_id}/timeouts",
       [{"content-type", "application/json"}],
       timeout
     )
@@ -110,9 +110,9 @@ defmodule DirtyDriver.Commands do
   """
   def set_url(url) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/url",
+      "/session/#{SessionAgent.session_id}/url",
       [{"content-type", "application/json"}],
       "{\"url\": \"#{url}\"}"
     )
@@ -122,9 +122,9 @@ defmodule DirtyDriver.Commands do
 
   def get_url do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/url",
+      "/session/#{SessionAgent.session_id}/url",
       [],
       ""
     )
@@ -134,9 +134,9 @@ defmodule DirtyDriver.Commands do
 
   def back do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/back",
+      "/session/#{SessionAgent.session_id}/back",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -146,9 +146,9 @@ defmodule DirtyDriver.Commands do
 
   def forward do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/forward",
+      "/session/#{SessionAgent.session_id}/forward",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -158,9 +158,9 @@ defmodule DirtyDriver.Commands do
 
   def refresh do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/refresh",
+      "/session/#{SessionAgent.session_id}/refresh",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -170,9 +170,9 @@ defmodule DirtyDriver.Commands do
 
   def get_title do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/title",
+      "/session/#{SessionAgent.session_id}/title",
       [],
       ""
     )
@@ -185,9 +185,9 @@ defmodule DirtyDriver.Commands do
   """
   def get_window_handle do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/window",
+      "/session/#{SessionAgent.session_id}/window",
       [],
       ""
     )
@@ -197,9 +197,9 @@ defmodule DirtyDriver.Commands do
 
   def close_window do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "DELETE",
-      "/session/#{SessionAgent.session_id()}/window",
+      "/session/#{SessionAgent.session_id}/window",
       [],
       ""
     )
@@ -209,9 +209,9 @@ defmodule DirtyDriver.Commands do
 
   def switch_to_window(handle) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window",
+      "/session/#{SessionAgent.session_id}/window",
       [{"content-type", "application/json"}],
       "{\"handle\": \"#{ handle }\"}"
     )
@@ -221,9 +221,9 @@ defmodule DirtyDriver.Commands do
 
   def get_window_handles do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/window/handles",
+      "/session/#{SessionAgent.session_id}/window/handles",
       [],
       ""
     )
@@ -233,9 +233,9 @@ defmodule DirtyDriver.Commands do
 
   def new_window do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window/new",
+      "/session/#{SessionAgent.session_id}/window/new",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -245,9 +245,9 @@ defmodule DirtyDriver.Commands do
 
   def switch_to_frame do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/frame",
+      "/session/#{SessionAgent.session_id}/frame",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -257,9 +257,9 @@ defmodule DirtyDriver.Commands do
 
   def switch_to_parent_frame do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/frame/parent",
+      "/session/#{SessionAgent.session_id}/frame/parent",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -269,9 +269,9 @@ defmodule DirtyDriver.Commands do
 
   def get_window_rect do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/window/rect",
+      "/session/#{SessionAgent.session_id}/window/rect",
       [],
       ""
     )
@@ -281,11 +281,11 @@ defmodule DirtyDriver.Commands do
 
   def set_window_rect(width, height, x, y) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window/rect",
+      "/session/#{SessionAgent.session_id}/window/rect",
       [{"content-type", "application/json"}],
-      "{}"
+      "{\"width\": #{ width }, \"height\": #{ height }, \"x\": #{ x }, \"y\": #{ y }}"
     )
 
     MintHelper.receive_message(conn, request_ref)
@@ -293,9 +293,9 @@ defmodule DirtyDriver.Commands do
 
   def maximize_window do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window/maximize",
+      "/session/#{SessionAgent.session_id}/window/maximize",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -305,9 +305,9 @@ defmodule DirtyDriver.Commands do
 
   def minimize_window do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window/minimize",
+      "/session/#{SessionAgent.session_id}/window/minimize",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -317,9 +317,9 @@ defmodule DirtyDriver.Commands do
 
   def fullscreen_window do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/window/fullscreen",
+      "/session/#{SessionAgent.session_id}/window/fullscreen",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -332,9 +332,9 @@ defmodule DirtyDriver.Commands do
   """
   def get_active_element do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/active",
+      "/session/#{SessionAgent.session_id}/element/active",
       [],
       ""
     )
@@ -344,9 +344,9 @@ defmodule DirtyDriver.Commands do
 
   def find_element(location, selector) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element",
+      "/session/#{SessionAgent.session_id}/element",
       [{"content-type", "application/json"}],
       "{\"using\": \"#{selector}\", \"value\": \"#{location}\"}"
     )
@@ -356,9 +356,9 @@ defmodule DirtyDriver.Commands do
 
   def find_elements(location, selector) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/elements",
+      "/session/#{SessionAgent.session_id}/elements",
       [{"content-type", "application/json"}],
       "{\"using\": \"#{selector}\", \"value\": \"#{location}\"}"
     )
@@ -368,9 +368,9 @@ defmodule DirtyDriver.Commands do
 
   def find_element_from_element(location, selector) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/element",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/element",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -380,9 +380,9 @@ defmodule DirtyDriver.Commands do
 
   def find_elements_from_element(location, selector) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/elements",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/elements",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -392,9 +392,9 @@ defmodule DirtyDriver.Commands do
 
   def is_element_selected do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/selected",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/selected",
       [],
       ""
     )
@@ -404,9 +404,9 @@ defmodule DirtyDriver.Commands do
 
   def get_element_attribute(name) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/attribute/#{name}",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/attribute/#{name}",
       [],
       ""
     )
@@ -416,9 +416,9 @@ defmodule DirtyDriver.Commands do
 
   def get_element_property(name) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/property/#{name}",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/property/#{name}",
       [],
       ""
     )
@@ -428,9 +428,9 @@ defmodule DirtyDriver.Commands do
 
   def get_element_css_value(name) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/css/#{name}",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/css/#{name}",
       [],
       ""
     )
@@ -438,11 +438,11 @@ defmodule DirtyDriver.Commands do
     MintHelper.receive_message(conn, request_ref)
   end
 
-  def get_element_text(ele \\ ElementAgent.element()) do
+  def get_element_text(ele \\ ElementAgent.element) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ele}/text",
+      "/session/#{SessionAgent.session_id}/element/#{ele}/text",
       [],
       ""
     )
@@ -452,9 +452,9 @@ defmodule DirtyDriver.Commands do
 
   def get_element_tag_name do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/name",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/name",
       [],
       ""
     )
@@ -464,9 +464,9 @@ defmodule DirtyDriver.Commands do
 
   def get_element_rect do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/rect",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/rect",
       [],
       ""
     )
@@ -476,9 +476,9 @@ defmodule DirtyDriver.Commands do
 
   def is_element_enabled do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/enabled",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/enabled",
       [],
       ""
     )
@@ -488,9 +488,9 @@ defmodule DirtyDriver.Commands do
 
   def get_computed_role do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/computedrole",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/computedrole",
       [],
       ""
     )
@@ -500,9 +500,9 @@ defmodule DirtyDriver.Commands do
 
   def get_computed_label do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/computedlabel",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/computedlabel",
       [],
       ""
     )
@@ -512,9 +512,9 @@ defmodule DirtyDriver.Commands do
 
   def element_click do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/click",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/click",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -524,9 +524,9 @@ defmodule DirtyDriver.Commands do
 
   def element_clear do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/clear",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/clear",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -536,9 +536,9 @@ defmodule DirtyDriver.Commands do
 
   def element_send_keys(text) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/value",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/value",
       [{"content-type", "application/json"}],
       "{\"text\": \"#{text}\"}"
     )
@@ -551,9 +551,9 @@ defmodule DirtyDriver.Commands do
   """
   def get_page_source do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/source",
+      "/session/#{SessionAgent.session_id}/source",
       [],
       ""
     )
@@ -563,9 +563,9 @@ defmodule DirtyDriver.Commands do
 
   def execute_script(script, args \\ []) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/execute/sync",
+      "/session/#{SessionAgent.session_id}/execute/sync",
       [{"content-type", "application/json"}],
       "{\"script\": \"#{script}\", \"args\": #{inspect args}}"
     )
@@ -575,9 +575,9 @@ defmodule DirtyDriver.Commands do
 
   def execute_async_script(script, args \\ []) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/execute/async",
+      "/session/#{SessionAgent.session_id}/execute/async",
       [{"content-type", "application/json"}],
       "{\"script\": \"#{script}\", \"args\": #{inspect args}}"
     )
@@ -590,9 +590,9 @@ defmodule DirtyDriver.Commands do
   """
   def get_all_cookies do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/cookie",
+      "/session/#{SessionAgent.session_id}/cookie",
       [],
       ""
     )
@@ -602,9 +602,9 @@ defmodule DirtyDriver.Commands do
 
   def get_named_cookie(name) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/cookie/#{name}",
+      "/session/#{SessionAgent.session_id}/cookie/#{name}",
       [{"content-type", "application/json"}],
       "{\"name\": \"#{name}\"}"
     )
@@ -614,9 +614,9 @@ defmodule DirtyDriver.Commands do
 
   def add_cookie(cookie) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/cookie",
+      "/session/#{SessionAgent.session_id}/cookie",
       [{"content-type", "application/json"}],
       "{\"cookie\": #{cookie}}"
     )
@@ -626,9 +626,9 @@ defmodule DirtyDriver.Commands do
 
   def delete_cookie(name) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "DELETE",
-      "/session/#{SessionAgent.session_id()}/cookie/#{name}",
+      "/session/#{SessionAgent.session_id}/cookie/#{name}",
       [],
       ""
     )
@@ -638,9 +638,9 @@ defmodule DirtyDriver.Commands do
 
   def delete_all_cookies do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "DELETE",
-      "/session/#{SessionAgent.session_id()}/cookie",
+      "/session/#{SessionAgent.session_id}/cookie",
       [],
       ""
     )
@@ -653,9 +653,9 @@ defmodule DirtyDriver.Commands do
   """
   def perform_actions(actions) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/actions",
+      "/session/#{SessionAgent.session_id}/actions",
       [{"content-type", "application/json"}],
       actions
     )
@@ -665,9 +665,9 @@ defmodule DirtyDriver.Commands do
 
   def release_actions do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "DELETE",
-      "/session/#{SessionAgent.session_id()}/actions",
+      "/session/#{SessionAgent.session_id}/actions",
       [],
       ""
     )
@@ -680,9 +680,9 @@ defmodule DirtyDriver.Commands do
   """
   def dismiss_alert do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/alert/dismiss",
+      "/session/#{SessionAgent.session_id}/alert/dismiss",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -692,9 +692,9 @@ defmodule DirtyDriver.Commands do
 
   def accept_alert do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/alert/accept",
+      "/session/#{SessionAgent.session_id}/alert/accept",
       [{"content-type", "application/json"}],
       "{}"
     )
@@ -704,9 +704,9 @@ defmodule DirtyDriver.Commands do
 
   def get_alert_text do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/alert/text",
+      "/session/#{SessionAgent.session_id}/alert/text",
       [],
       ""
     )
@@ -716,9 +716,9 @@ defmodule DirtyDriver.Commands do
 
   def send_alert_text(text) do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/alert/text",
+      "/session/#{SessionAgent.session_id}/alert/text",
       [{"content-type", "application/json"}],
       "{\"text\": \"#{text}\"}"
     )
@@ -731,9 +731,9 @@ defmodule DirtyDriver.Commands do
   """
   def take_screenshot do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/screenshot",
+      "/session/#{SessionAgent.session_id}/screenshot",
       [],
       ""
     )
@@ -743,9 +743,9 @@ defmodule DirtyDriver.Commands do
 
   def take_element_screenshot do
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "GET",
-      "/session/#{SessionAgent.session_id()}/element/#{ElementAgent.element()}/screenshot",
+      "/session/#{SessionAgent.session_id}/element/#{ElementAgent.element}/screenshot",
       [],
       ""
     )
@@ -761,9 +761,9 @@ defmodule DirtyDriver.Commands do
     data = "{\"pageRanges\": [\"#{range}\"], \"totalPages\": \"#{total_pages}\"}"
 
     {:ok, conn, request_ref} = Mint.HTTP.request(
-      ConnectionAgent.conn(),
+      ConnectionAgent.conn,
       "POST",
-      "/session/#{SessionAgent.session_id()}/print",
+      "/session/#{SessionAgent.session_id}/print",
       [{"content-type", "application/json"}],
       data
     )
