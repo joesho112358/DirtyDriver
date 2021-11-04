@@ -32,6 +32,9 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     SESSIONS
+    POST 	/session 	New Session
+    DELETE 	/session/{session id} 	Delete Session
+    GET 	/status 	Status
   """
 
   def open_browser(browser) do
@@ -54,6 +57,8 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     TIMEOUTS
+    GET 	/session/{session id}/timeouts 	Get Timeouts
+    POST 	/session/{session id}/timeouts 	Set Timeouts
   """
 
   def get_timeouts do
@@ -82,6 +87,12 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     NAVIGATION
+    POST 	/session/{session id}/url 	Navigate To
+    GET 	/session/{session id}/url 	Get Current URL
+    POST 	/session/{session id}/back 	Back
+    POST 	/session/{session id}/forward 	Forward
+    POST 	/session/{session id}/refresh 	Refresh
+    GET 	/session/{session id}/title 	Get Title
   """
 
   def go_to(url) do
@@ -114,6 +125,17 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     CONTEXTS
+    GET 	/session/{session id}/window 	Get Window Handle
+    DELETE 	/session/{session id}/window 	Close Window
+    POST 	/session/{session id}/window 	Switch To Window
+    GET 	/session/{session id}/window/handles 	Get Window Handles
+    POST 	/session/{session id}/frame 	Switch To Frame
+    POST 	/session/{session id}/frame/parent 	Switch To Parent Frame
+    GET 	/session/{session id}/window/rect 	Get Window Rect
+    POST 	/session/{session id}/window/rect 	Set Window Rect
+    POST 	/session/{session id}/window/maximize 	Maximize Window
+    POST 	/session/{session id}/window/minimize 	Minimize Window
+    POST 	/session/{session id}/window/fullscreen 	Fullscreen Window
   """
 
   def get_window_handle do
@@ -174,6 +196,9 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     DOCUMENT
+    GET 	/session/{session id}/source 	Get Page Source
+    POST 	/session/{session id}/execute/sync 	Execute Script
+    POST 	/session/{session id}/execute/async 	Execute Async Script
   """
 
   @spec get_page_source :: String
@@ -194,6 +219,11 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     COOKIES
+    GET 	/session/{session id}/cookie 	Get All Cookies
+    GET 	/session/{session id}/cookie/{name} 	Get Named Cookie
+    POST 	/session/{session id}/cookie 	Add Cookie
+    DELETE 	/session/{session id}/cookie/{name} 	Delete Cookie
+    DELETE 	/session/{session id)/cookie 	Delete All Cookies
   """
 
   def get_all_cookies do
@@ -220,6 +250,8 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     ACTIONS
+    POST 	/session/{session id}/actions 	Perform Actions
+    DELETE 	/session/{session id}/actions 	Release Actions
   """
   def perform_actions(actions) do
   end
@@ -229,6 +261,10 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     USER PROMPTS
+    POST 	/session/{session id}/alert/dismiss 	Dismiss Alert
+    POST 	/session/{session id}/alert/accept 	Accept Alert
+    GET 	/session/{session id}/alert/text 	Get Alert Text
+    POST 	/session/{session id}/alert/text 	Send Alert Text
   """
 
   def dismiss_alert do
@@ -250,6 +286,8 @@ defmodule DirtyDriver.Browser do
 
   @doc """
     SCREEN CAPTURE
+    GET 	/session/{session id}/screenshot 	Take Screenshot
+    GET 	/session/{session id}/element/{element id}/screenshot 	Take Element Screenshot
   """
 
   def save_screenshot(file_name) do
